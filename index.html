@@ -1,12 +1,772 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guitar Notes</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guitar Note Trainer</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Sarabun:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0f;
+    --surface: #161619;
+    --surface2: #1e1e23;
+    --border: #2a2a32;
+    --border2: #3a3a46;
+    --accent: #e8ff47;
+    --accent2: #47ffb8;
+    --accent3: #ff6b47;
+    --text: #f0f0f5;
+    --text2: #8888a0;
+    --text3: #555568;
+    --correct: #47ffb8;
+    --wrong: #ff6b47;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Sarabun', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 2rem 1rem;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 10%, rgba(232,255,71,0.04) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 50% at 80% 90%, rgba(71,255,184,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    width: 100%;
+    max-width: 520px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Header */
+  .header {
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .header-title {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+  .header-sub {
+    font-size: 13px;
+    color: var(--text3);
+  }
+
+  /* Range selector */
+  .range-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .range-lbl {
+    font-size: 11px;
+    color: var(--text3);
+    font-family: var(--mono);
+    letter-spacing: 0.08em;
+    align-self: center;
+    text-transform: uppercase;
+  }
+  .range-btn {
+    padding: 4px 12px;
+    font-size: 12px;
+    font-family: var(--mono);
+    border-radius: 2px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    cursor: pointer;
+    letter-spacing: 0.04em;
+    transition: all 0.15s;
+  }
+  .range-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .range-btn.active {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+    font-weight: 700;
+  }
+
+  /* Main note display */
+  .note-display {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .note-display::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 100%, rgba(232,255,71,0.03) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .note-prompt {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+  }
+  .note-big {
+    font-family: var(--mono);
+    font-size: 100px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--text);
+    transition: color 0.3s;
+    letter-spacing: -0.02em;
+    position: relative;
+    z-index: 1;
+  }
+  .note-big.correct { color: var(--correct); }
+  .note-big.wrong { color: var(--wrong); }
+  .note-alias {
+    font-size: 13px;
+    color: var(--text3);
+    font-family: var(--mono);
+    margin-top: 10px;
+    letter-spacing: 0.06em;
+    min-height: 20px;
+  }
+
+  /* Waveform */
+  .waveform {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    margin-bottom: 1rem;
+  }
+  .wv-bar {
+    width: 3px;
+    background: var(--border2);
+    border-radius: 2px;
+    min-height: 3px;
+    transition: height 0.07s, background 0.3s;
+  }
+  .wv-bar.active { background: var(--accent2); }
+
+  /* Detected panel */
+  .detected-panel {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 1rem 1.25rem;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .detected-lbl {
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .detected-note {
+    font-family: var(--mono);
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text2);
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .detected-note.match { color: var(--correct); }
+  .detected-note.mismatch { color: var(--wrong); }
+  .detected-right { text-align: right; }
+  .detected-hz {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--text2);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .detected-cents {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  /* Status bar */
+  .status-bar {
+    border-radius: 4px;
+    padding: 10px 14px;
+    font-size: 13px;
+    font-family: var(--mono);
+    letter-spacing: 0.04em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 1rem;
+    border: 0.5px solid var(--border);
+    color: var(--text3);
+    background: var(--surface);
+    transition: all 0.25s;
+    min-height: 42px;
+  }
+  .status-bar.listening {
+    border-color: rgba(71,255,184,0.3);
+    color: var(--accent2);
+    background: rgba(71,255,184,0.05);
+  }
+  .status-bar.correct {
+    border-color: rgba(71,255,184,0.5);
+    color: var(--correct);
+    background: rgba(71,255,184,0.08);
+  }
+  .status-bar.wrong {
+    border-color: rgba(255,107,71,0.3);
+    color: var(--wrong);
+    background: rgba(255,107,71,0.05);
+  }
+
+  .mic-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent2);
+    flex-shrink: 0;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0%,100% { opacity:1; } 50% { opacity:0.2; }
+  }
+
+  /* Buttons */
+  .btn-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .btn {
+    padding: 12px 16px;
+    border-radius: 4px;
+    border: 0.5px solid var(--border2);
+    background: transparent;
+    color: var(--text2);
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn:hover { border-color: var(--text2); color: var(--text); }
+  .btn:active { transform: scale(0.98); }
+  .btn-accent {
+    background: var(--accent);
+    color: var(--bg);
+    border-color: var(--accent);
+  }
+  .btn-accent:hover { background: #d4eb3f; border-color: #d4eb3f; color: var(--bg); }
+  .btn-stop {
+    border-color: rgba(255,107,71,0.4);
+    color: var(--wrong);
+  }
+  .btn-stop:hover { border-color: var(--wrong); background: rgba(255,107,71,0.08); color: var(--wrong); }
+
+  /* Score row */
+  .score-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+  .score-card {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    padding: 0.875rem 1rem;
+    text-align: center;
+  }
+  .score-num {
+    font-family: var(--mono);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+  .score-lbl {
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+  }
+
+  /* History */
+  .history-wrap {
+    background: var(--surface);
+    border: 0.5px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .history-head {
+    padding: 10px 14px;
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    color: var(--text3);
+    text-transform: uppercase;
+    border-bottom: 0.5px solid var(--border);
+  }
+  .history-list {
+    max-height: 160px;
+    overflow-y: auto;
+  }
+  .history-list::-webkit-scrollbar { width: 4px; }
+  .history-list::-webkit-scrollbar-track { background: transparent; }
+  .history-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+  .history-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    border-bottom: 0.5px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.04em;
+  }
+  .history-item:last-child { border-bottom: none; }
+  .hi-target { color: var(--text); font-weight: 700; width: 24px; }
+  .hi-arrow { color: var(--text3); }
+  .hi-detected { color: var(--text2); flex: 1; }
+  .hi-ok { color: var(--correct); }
+  .hi-fail { color: var(--wrong); }
+  .history-empty {
+    padding: 16px 14px;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--text3);
+    letter-spacing: 0.04em;
+  }
+
+  /* Confirm hold ring */
+  @keyframes ring-grow {
+    from { transform: scale(0.8); opacity:0.8; }
+    to { transform: scale(1.4); opacity:0; }
+  }
+  .confirm-ring {
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--correct);
+    border-radius: 4px;
+    pointer-events: none;
+    animation: ring-grow 0.6s ease-out forwards;
+  }
+
+</style>
 </head>
 <body>
-    <h1>Welcome to Guitar Notes</h1>
-    
+
+<div class="app">
+
+  <div class="header">
+    <span class="header-title">Guitar Note Trainer</span>
+    <span class="header-sub">ฝึกจำตำแหน่งโน๊ตบนคอกีต้าร์</span>
+  </div>
+
+  <div class="range-row">
+    <span class="range-lbl">ระดับ</span>
+    <button class="range-btn active" onclick="setRange('basic')" id="r-basic">E–G พื้นฐาน</button>
+    <button class="range-btn" onclick="setRange('natural')" id="r-natural">7 โน๊ต</button>
+    <button class="range-btn" onclick="setRange('all')" id="r-all">ทั้งหมด + #/♭</button>
+  </div>
+
+  <div class="note-display" id="note-display">
+    <div class="note-prompt">// โน๊ตที่ต้องเล่น</div>
+    <div class="note-big" id="target-note">?</div>
+    <div class="note-alias" id="target-alias">— กด ROLL เพื่อสุ่มโน๊ต —</div>
+  </div>
+
+  <div class="waveform" id="waveform">
+    <div class="wv-bar" style="height:4px"></div>
+    <div class="wv-bar" style="height:8px"></div>
+    <div class="wv-bar" style="height:14px"></div>
+    <div class="wv-bar" style="height:10px"></div>
+    <div class="wv-bar" style="height:20px"></div>
+    <div class="wv-bar" style="height:14px"></div>
+    <div class="wv-bar" style="height:8px"></div>
+    <div class="wv-bar" style="height:16px"></div>
+    <div class="wv-bar" style="height:22px"></div>
+    <div class="wv-bar" style="height:14px"></div>
+    <div class="wv-bar" style="height:8px"></div>
+    <div class="wv-bar" style="height:18px"></div>
+    <div class="wv-bar" style="height:12px"></div>
+    <div class="wv-bar" style="height:6px"></div>
+    <div class="wv-bar" style="height:10px"></div>
+    <div class="wv-bar" style="height:6px"></div>
+    <div class="wv-bar" style="height:4px"></div>
+    <div class="wv-bar" style="height:8px"></div>
+    <div class="wv-bar" style="height:12px"></div>
+    <div class="wv-bar" style="height:8px"></div>
+  </div>
+
+  <div class="detected-panel">
+    <div>
+      <div class="detected-lbl">// ตรวจจับได้</div>
+      <div class="detected-note" id="detected-note">—</div>
+    </div>
+    <div class="detected-right">
+      <div class="detected-hz" id="detected-hz">— Hz</div>
+      <div class="detected-cents" id="detected-cents"></div>
+    </div>
+  </div>
+
+  <div class="status-bar" id="status-bar">
+    <span style="font-size:16px;">◦</span>
+    <span id="status-text">ยังไม่ได้เปิดไมค์</span>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-accent" onclick="randomNote()" id="btn-roll">
+      ⟳ ROLL
+    </button>
+    <button class="btn" onclick="startListening()" id="btn-start">
+      ● REC
+    </button>
+    <button class="btn btn-stop" onclick="stopListening()" id="btn-stop" style="display:none; grid-column: 2;">
+      ■ STOP
+    </button>
+  </div>
+
+  <div class="score-row">
+    <div class="score-card">
+      <div class="score-num" id="sc-correct">0</div>
+      <div class="score-lbl">ถูก</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num" id="sc-total">0</div>
+      <div class="score-lbl">รวม</div>
+    </div>
+    <div class="score-card">
+      <div class="score-num" id="sc-pct">—</div>
+      <div class="score-lbl">แม่น</div>
+    </div>
+  </div>
+
+  <div class="history-wrap">
+    <div class="history-head">// ประวัติ</div>
+    <div class="history-list" id="history-list">
+      <div class="history-empty">ยังไม่มีประวัติการเล่น</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const NOTES_ALL     = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+const NOTES_NATURAL = ['C','D','E','F','G','A','B'];
+const NOTES_BASIC   = ['E','F','G','A','B','C','D'];
+const ALIASES = {'C#':'D♭','D#':'E♭','F#':'G♭','G#':'A♭','A#':'B♭'};
+
+let currentRange = 'basic';
+let targetNote = null;
+let audioCtx = null, analyser = null, sourceNode = null, stream = null;
+let isListening = false;
+let isFrozen = false;   // true = mic connected but detection paused between notes
+let animFrameId = null;
+let waveAnimId = null;
+let matchHoldCount = 0;
+let lastDetected = null;
+let correctCount = 0, totalCount = 0;
+let historyItems = [];
+
+/* ─── Range selector ─── */
+function setRange(r) {
+  currentRange = r;
+  document.querySelectorAll('.range-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('r-' + r).classList.add('active');
+}
+
+function getNoteList() {
+  if (currentRange === 'basic')   return NOTES_BASIC;
+  if (currentRange === 'natural') return NOTES_NATURAL;
+  return NOTES_ALL;
+}
+
+/* ─── Random note ─── */
+function randomNote() {
+  const list = getNoteList();
+  let n;
+  do { n = list[Math.floor(Math.random() * list.length)]; }
+  while (n === targetNote && list.length > 1);
+  targetNote = n;
+
+  const el = document.getElementById('target-note');
+  el.textContent = n;
+  el.className = 'note-big';
+
+  document.getElementById('target-alias').textContent =
+    ALIASES[n] ? `(เรียกอีกชื่อว่า ${ALIASES[n]})` : `โน๊ต ${n}`;
+  document.getElementById('detected-note').textContent = '—';
+  document.getElementById('detected-note').className = 'detected-note';
+  document.getElementById('detected-hz').textContent = '— Hz';
+  document.getElementById('detected-cents').textContent = '';
+  matchHoldCount = 0;
+  lastDetected = null;
+
+  // if user hits ROLL manually mid-freeze, unfreeze right away
+  if (isFrozen) isFrozen = false;
+
+  if (isListening) {
+    setStatus('listening', `กำลังฟัง... เล่นโน๊ต ${n}`);
+  }
+}
+
+/* ─── Audio / Pitch detection ─── */
+async function startListening() {
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    analyser = audioCtx.createAnalyser();
+    analyser.fftSize = 2048;
+    sourceNode = audioCtx.createMediaStreamSource(stream);
+    sourceNode.connect(analyser);
+    isListening = true;
+
+    document.getElementById('btn-start').style.display = 'none';
+    document.getElementById('btn-stop').style.display = 'flex';
+    setStatus('listening', targetNote ? `กำลังฟัง... เล่นโน๊ต ${targetNote}` : 'กำลังฟัง...');
+    startWaveAnim();
+    detectLoop();
+  } catch (e) {
+    setStatus('idle', 'ไม่สามารถเข้าถึงไมค์ได้ — กรุณาอนุญาตสิทธิ์');
+  }
+}
+
+function stopListening() {
+  isListening = false;
+  isFrozen = false;
+  if (stream) stream.getTracks().forEach(t => t.stop());
+  if (audioCtx) { audioCtx.close(); audioCtx = null; }
+  cancelAnimationFrame(animFrameId);
+  cancelAnimationFrame(waveAnimId);
+  analyser = sourceNode = stream = null;
+  document.getElementById('btn-start').style.display = 'flex';
+  document.getElementById('btn-stop').style.display = 'none';
+  document.querySelectorAll('.wv-bar').forEach(b => {
+    b.style.height = '4px';
+    b.classList.remove('active');
+  });
+  setStatus('idle', 'หยุดรับฟังแล้ว');
+}
+
+function detectLoop() {
+  if (!isListening || !analyser) return;
+  if (isFrozen) { animFrameId = requestAnimationFrame(detectLoop); return; }
+  const buf = new Float32Array(analyser.fftSize);
+  analyser.getFloatTimeDomainData(buf);
+  const freq = autoCorrelate(buf, audioCtx.sampleRate);
+
+  if (freq > 0) {
+    const result = freqToNote(freq);
+    if (result) {
+      const dn = document.getElementById('detected-note');
+      dn.textContent = result.name + result.octave;
+
+      document.getElementById('detected-hz').textContent = Math.round(freq) + ' Hz';
+      const c = result.cents;
+      document.getElementById('detected-cents').textContent =
+        c === 0 ? 'ตรง ✓' : (c > 0 ? `+${c}¢ สูงเล็กน้อย` : `${c}¢ ต่ำเล็กน้อย`);
+
+      if (targetNote) {
+        if (result.name === targetNote) {
+          dn.className = 'detected-note match';
+          if (lastDetected === targetNote) matchHoldCount++;
+          else { matchHoldCount = 1; lastDetected = result.name; }
+
+          if (matchHoldCount >= 7) {
+            onCorrect(result.name, result.octave);
+          } else {
+            setStatus('listening', `กำลังยืนยัน ${result.name}${'·'.repeat(matchHoldCount)}`);
+          }
+        } else {
+          dn.className = 'detected-note mismatch';
+          matchHoldCount = 0;
+          lastDetected = result.name;
+          setStatus('wrong', `ได้ยิน ${result.name} — ต้องการ ${targetNote}`);
+        }
+      }
+    }
+  } else {
+    if (targetNote && isListening) setStatus('listening', `กำลังฟัง... เล่นโน๊ต ${targetNote}`);
+  }
+
+  animFrameId = requestAnimationFrame(detectLoop);
+}
+
+function onCorrect(name, octave) {
+  isFrozen = true;   // stop detection immediately
+  matchHoldCount = 0; lastDetected = null;
+
+  const el = document.getElementById('target-note');
+  el.classList.add('correct');
+  const ring = document.createElement('div');
+  ring.className = 'confirm-ring';
+  document.getElementById('note-display').appendChild(ring);
+  setTimeout(() => ring.remove(), 700);
+
+  recordResult(true, name + octave);
+
+  // Countdown display: 3 → 2 → 1 → next note
+  const DELAY = 2000;
+  const steps = [
+    { t: 0,    msg: `✓ ถูกต้อง! ${name}${octave}`, type: 'correct' },
+    { t: 700,  msg: `⏱ โน๊ตถัดไปใน 3...`,          type: 'correct' },
+    { t: 1000, msg: `⏱ โน๊ตถัดไปใน 2...`,          type: 'correct' },
+    { t: 1400, msg: `⏱ โน๊ตถัดไปใน 1...`,          type: 'correct' },
+  ];
+  steps.forEach(s => setTimeout(() => setStatus(s.type, s.msg), s.t));
+
+  setTimeout(() => {
+    if (!isListening) return;
+    isFrozen = false;   // re-enable detection
+    randomNote();
+  }, DELAY);
+}
+
+/* ─── Autocorrelation pitch detection ─── */
+function autoCorrelate(buf, sr) {
+  const SIZE = buf.length;
+  const MAX = Math.floor(SIZE / 2);
+  let rms = 0;
+  for (let i = 0; i < SIZE; i++) rms += buf[i] * buf[i];
+  rms = Math.sqrt(rms / SIZE);
+  if (rms < 0.01) return -1;
+
+  let r1 = 0, r2 = SIZE - 1;
+  for (let i = 0; i < SIZE / 2; i++) { if (Math.abs(buf[i]) < 0.2) { r1 = i; break; } }
+  for (let i = 1; i < SIZE / 2; i++) { if (Math.abs(buf[SIZE - i]) < 0.2) { r2 = SIZE - i; break; } }
+  const b = buf.slice(r1, r2 + 1);
+  const c = new Float32Array(MAX);
+  for (let i = 0; i < MAX; i++)
+    for (let j = 0; j < MAX; j++)
+      if (b[j] !== undefined && b[j + i] !== undefined) c[i] += b[j] * b[j + i];
+
+  let d = 0; while (c[d] > c[d + 1]) d++;
+  let mx = -1, pos = -1;
+  for (let i = d; i < MAX; i++) if (c[i] > mx) { mx = c[i]; pos = i; }
+  if (pos < 1) return -1;
+  let T0 = pos;
+  const x1 = c[T0-1], x2 = c[T0], x3 = c[T0+1];
+  const a = (x1 + x3 - 2*x2) / 2;
+  if (a) T0 -= (x3 - x1) / (2 * 2 * a);
+  return sr / T0;
+}
+
+function freqToNote(freq) {
+  if (freq < 70 || freq > 1050) return null;
+  const semis = 12 * Math.log2(freq / 440);
+  const midi  = Math.round(semis) + 69;
+  const idx   = ((midi % 12) + 12) % 12;
+  const oct   = Math.floor(midi / 12) - 1;
+  const cents = Math.round((semis - (midi - 69)) * 100);
+  return { name: NOTES_ALL[idx], octave: oct, cents };
+}
+
+/* ─── Waveform animation ─── */
+function startWaveAnim() {
+  const bars = document.querySelectorAll('.wv-bar');
+  function frame() {
+    if (!isListening) return;
+    if (analyser) {
+      const data = new Uint8Array(analyser.frequencyBinCount);
+      analyser.getByteFrequencyData(data);
+      bars.forEach((b, i) => {
+        const v = data[Math.floor(i * data.length / bars.length / 5)];
+        const h = 4 + Math.round((v / 255) * 32);
+        b.style.height = h + 'px';
+        b.classList.toggle('active', v > 30);
+      });
+    }
+    waveAnimId = requestAnimationFrame(frame);
+  }
+  frame();
+}
+
+/* ─── Status ─── */
+function setStatus(type, txt) {
+  const bar = document.getElementById('status-bar');
+  bar.className = 'status-bar ' + type;
+  const dot = type === 'listening' ? '<div class="mic-dot"></div>' : '<span style="font-size:16px">◦</span>';
+  bar.innerHTML = dot + '<span>' + txt + '</span>';
+}
+
+/* ─── Score / History ─── */
+function recordResult(ok, detected) {
+  if (!targetNote) return;
+  if (ok) correctCount++;
+  totalCount++;
+  document.getElementById('sc-correct').textContent = correctCount;
+  document.getElementById('sc-total').textContent = totalCount;
+  document.getElementById('sc-pct').textContent =
+    Math.round(correctCount / totalCount * 100) + '%';
+
+  historyItems.unshift({ target: targetNote, detected, ok });
+  if (historyItems.length > 30) historyItems.pop();
+  renderHistory();
+}
+
+function renderHistory() {
+  const el = document.getElementById('history-list');
+  if (!historyItems.length) {
+    el.innerHTML = '<div class="history-empty">ยังไม่มีประวัติการเล่น</div>';
+    return;
+  }
+  el.innerHTML = historyItems.map(h => `
+    <div class="history-item">
+      <span class="hi-target">${h.target}</span>
+      <span class="hi-arrow">→</span>
+      <span class="hi-detected">${h.detected}</span>
+      <span class="${h.ok ? 'hi-ok' : 'hi-fail'}">${h.ok ? '✓' : '✗'}</span>
+    </div>
+  `).join('');
+}
+
+/* init */
+randomNote();
+</script>
 </body>
 </html>
