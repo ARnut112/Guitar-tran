@@ -1,1 +1,65 @@
-ทดสอยการอัพโค้ดข้ึน Github 
+# Guitar Note Trainer
+
+## 📖 Overview
+โปรแกรมฝึกจำตำแหน่งโน้ตบนคอกีตาร์
+
+---
+
+## ✨ Features
+
+- Random Note
+- Timer Mode
+- Score System
+- Dark Mode
+
+---
+
+## 🚀 Live Demo
+
+https://arnut112.github.io/Guitar-tran/
+
+---
+
+## 📷 Screenshot
+
+(ใส่รูป)
+
+---
+
+## 🛠️ Technologies
+
+- HTML
+- CSS
+- JavaScript
+
+---
+
+## 📂 Project Structure
+
+index.html
+style.css
+script.js
+
+---
+
+## ⚙️ Installation
+
+git clone ...
+
+หรือ
+
+เปิด index.html
+
+---
+
+## 🎯 Future Plans
+
+- Mobile Support
+- Chord Training
+- Ear Training
+
+---
+
+## 👨‍💻 Author
+
+ARnut112
