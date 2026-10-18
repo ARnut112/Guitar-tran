@@ -1,12 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Guitar Notes</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151817">
+  <meta name="description" content="ห้องฝึกฟิงเกอร์สไตล์ของน้องนัด จำโน้ตบนคอกีตาร์ ฝึกคอร์ด ฟังเสียง และเล่นอย่างเป็นจังหวะ">
+  <title>Fret & Flow — ห้องฝึกกีตาร์ของน้องนัด</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./chords.css">
+  <link rel="stylesheet" href="./practice.css">
 </head>
 <body>
-    <h1>Welcome to Guitar Notes</h1>
-    
+  <a class="skip-link" href="#main">ข้ามไปเนื้อหา</a>
+  <aside class="sidebar" aria-label="เมนูหลัก">
+    <a class="brand" href="#home" aria-label="Fret and Flow หน้าหลัก"><span class="brand-mark" aria-hidden="true">f.</span><span>fret<span class="brand-amp">&</span>flow<small>YOUR EVERYDAY GUITAR STUDIO</small></span></a>
+    <div class="nav-label">ห้องฝึกของน้องนัด</div>
+    <nav id="navigation"></nav>
+    <div class="sidebar-bottom"><div class="little-strings" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div><p>ทีละโน้ต ทีละวัน<br><strong>เดี๋ยวก็เป็นเพลงค่ะ</strong></p><span>MAKE A LITTLE PROGRESS.</span></div>
+    <button class="profile" id="progress-button"><span class="avatar">น</span><span><strong>น้องนัด</strong><small>ดูความก้าวหน้าของเรา</small></span><span aria-hidden="true">↗</span></button>
+  </aside>
+  <div class="workspace">
+    <header class="topbar"><div class="breadcrumb">MY STUDIO <span>/</span> <strong id="current-page">ภาพรวมการฝึก</strong></div><div class="top-actions"><span class="streak" id="top-streak"></span><button class="btn btn-quiet" id="metro-toggle" aria-expanded="false" aria-controls="metronome">เมโทรนอม</button><a href="#tuner" class="btn btn-secondary top-tuner">ตั้งสาย <span aria-hidden="true">↗</span></a></div></header>
+    <div class="metro-popover panel" id="metronome" hidden><div class="section-heading"><strong>จับจังหวะให้มั่นคง</strong><button class="icon-button" id="metro-close" aria-label="ปิดเมโทรนอม">×</button></div><div class="metro-bpm"><button class="icon-button" data-bpm="-5" aria-label="ช้าลง 5 BPM">−</button><strong id="bpm-label">72 <small>BPM</small></strong><button class="icon-button" data-bpm="5" aria-label="เร็วขึ้น 5 BPM">+</button></div><input id="metro-tempo" aria-label="ความเร็วเมโทรนอม" type="range" min="40" max="180" value="72"><div class="metro-beats" id="metro-beats"><i></i><i></i><i></i><i></i></div><button id="metro-start" class="btn btn-primary">เริ่มจังหวะ 4/4</button><p class="muted small">เสียงแรกเน้นจังหวะที่ 1</p></div>
+    <main id="main" tabindex="-1"></main>
+    <footer class="site-footer"><span>fret & flow <span class="footer-dot">·</span> พื้นที่เล็ก ๆ สำหรับการเล่นที่ดีขึ้น</span><span>STANDARD TUNING <b>E A D G B E</b></span></footer>
+  </div>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <dialog id="progress-dialog" aria-labelledby="progress-title"><div id="progress-content"></div></dialog>
+  <noscript><p>เปิด JavaScript เพื่อใช้คอกีตาร์และแบบฝึกเสียงค่ะ</p></noscript>
+  <script type="module" src="./app.js"></script>
 </body>
 </html>

@@ -1,0 +1,155 @@
+.chord-page { display: grid; gap: 26px; color: #f4f3e9; }
+.chord-intro { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.chord-intro h1 { margin: 6px 0 10px; font-size: clamp(24px, 3vw, 34px); line-height: 1.4; letter-spacing: -.6px; }
+.chord-intro p { margin: 0; max-width: 670px; line-height: 1.8; }
+.chord-intro .eyebrow, .chord-detail .eyebrow, .chord-progression .eyebrow { color: #b5d4a0; font-size: 10px; font-weight: 700; letter-spacing: 2px; }
+.chord-count-tag { padding: 11px 16px; border: 1px solid #343e31; border-radius: 99px; color: #b5d4a0; background: #222c21; font-size: 12px; white-space: nowrap; }
+.chord-workspace { display: grid; grid-template-columns: minmax(270px, .8fr) minmax(0, 1.55fr); gap: 22px; align-items: stretch; }
+.chord-catalog, .chord-detail, .chord-progression { background: #1d211f; border: 1px solid #343a34; border-radius: 18px; padding: 25px; min-width: 0; }
+.chord-search-label { display: block; color: #e0e4d9; font-size: 13px; font-weight: 650; margin-bottom: 9px; }
+.chord-search-wrap { position: relative; }
+.chord-search-wrap > span { position: absolute; left: 14px; top: 50%; transform: translateY(-55%); font-size: 27px; color: #a4aaa3; pointer-events: none; }
+.chord-search { width: 100%; box-sizing: border-box; border: 1px solid #3a423a; border-radius: 10px; background: #151817; padding: 12px 12px 12px 40px; color: #f4f3e9; font: inherit; font-size: 13px; min-height: 45px; }
+.chord-search::placeholder { color: #8b948a; }
+.chord-filters { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.chord-filters label { display: grid; gap: 6px; font-size: 11px; color: #a4aaa3; min-width: 0; }
+.chord-filters .select { width: 100%; box-sizing: border-box; border: 1px solid #343a34; border-radius: 8px; background: #151817; color: #e0e4d9; padding: 9px 10px; min-height: 39px; font: inherit; font-size: 12px; }
+.chord-position-filter { grid-column: 1 / -1; }
+.chord-results-heading { display: flex; justify-content: space-between; align-items: center; margin: 22px 0 12px; color: #a4aaa3; font-size: 11px; }
+.chord-text-button { background: none; border: 0; color: #b5d4a0; font: inherit; font-size: 11px; padding: 4px 0; cursor: pointer; }
+.chord-results { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; max-height: 431px; min-height: 180px; align-content: start; overflow-y: auto; scrollbar-color: #4a5845 #151817; scrollbar-width: thin; padding: 2px 5px 2px 2px; }
+.chord-result { min-height: 70px; display: flex; align-items: flex-start; justify-content: center; flex-direction: column; gap: 6px; background: #191d1b; color: #dce3d5; border: 1px solid #343a34; border-radius: 10px; padding: 11px 12px; text-align: left; cursor: pointer; transition: background .18s, border-color .18s; }
+.chord-result strong { font-family: inherit; font-size: 18px; font-weight: 700; line-height: 1; }
+.chord-result span { color: #8f998b; font-size: 9px; white-space: nowrap; }
+.chord-result:hover { border-color: #6d8161; background: #252d23; }
+.chord-result.is-selected { border-color: #a2bd8f; background: #b5d4a0; color: #1a2417; }
+.chord-result.is-selected span { color: #3a5031; }
+.chord-no-results { grid-column: 1 / -1; padding: 30px 10px; text-align: center; }
+.chord-no-results p { font-size: 12px; color: #a4aaa3; line-height: 1.8; }
+.chord-detail-heading { display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.chord-detail-heading h3 { font-size: 44px; margin: 4px 0; letter-spacing: -1px; line-height: 1.25; }
+.chord-detail-heading p { margin: 0; font-size: 12px; line-height: 1.8; }
+.chord-shape-count { border: 1px solid #384333; border-radius: 7px; padding: 6px 10px; font-size: 11px; color: #b5d4a0; white-space: nowrap; }
+.chord-shape-tabs { display: flex; gap: 7px; margin-top: 21px; flex-wrap: wrap; }
+.chord-shape-tab { padding: 8px 11px; border: 1px solid #343a34; border-radius: 7px; background: #191d1b; color: #a4aaa3; font-family: inherit; font-size: 11px; cursor: pointer; }
+.chord-shape-tab:hover, .chord-shape-tab.is-selected { color: #dfead7; background: #2b3527; border-color: #708162; }
+.chord-detail-body { display: grid; grid-template-columns: minmax(195px, .95fr) minmax(190px, 1fr); gap: 18px; align-items: center; margin-top: 10px; }
+.chord-diagram-wrap { min-width: 0; }
+.chord-diagram { display: block; width: 100%; max-width: 268px; max-height: 286px; margin: 0 auto; overflow: visible; }
+.chord-diagram-key { font-size: 9px; color: #8c9787; text-align: center; margin: -5px 0 10px; line-height: 1.9; }
+.chord-voicing-info { padding: 12px 0; }
+.chord-info-label { margin: 0 0 10px; font-size: 11px; color: #a4aaa3; }
+.chord-note-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chord-note-chips span { color: #c4dcb4; border-radius: 6px; border: 1px solid #3d4c35; background: #263023; padding: 7px 10px; font-size: 15px; font-weight: 650; }
+.chord-formula { margin: 8px 0 16px; color: #8f998b; font-size: 11px; letter-spacing: 1px; }
+.chord-shape-description { font-size: 11px; line-height: 1.95; color: #aab4a4; margin: 0 0 17px; }
+.chord-sound-actions { display: flex; gap: 7px; flex-wrap: wrap; }
+.chord-page .btn { cursor: pointer; font-family: inherit; font-size: 11px; min-height: 39px; padding: 10px 13px; border-radius: 8px; line-height: 1.5; }
+.chord-page .btn-primary { background: #b5d4a0; border: 1px solid #b5d4a0; color: #1a2516; font-weight: 700; }
+.chord-page .btn-primary:hover { background: #c5dfb4; }
+.chord-page .btn-secondary { background: #242a23; border: 1px solid #3b4437; color: #dce6d5; }
+.chord-page .btn-secondary:hover { background: #303b2c; border-color: #65775a; }
+.chord-add-button { display: block; background: none; border: 0; color: #b5d4a0; padding: 13px 0 0; font-family: inherit; font-size: 11px; cursor: pointer; text-align: left; }
+.chord-string-samples { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px; border-top: 1px solid #30372f; padding-top: 16px; margin-top: 7px; }
+.chord-string-button { display: flex; align-items: center; flex-direction: column; gap: 5px; padding: 10px 3px; border-radius: 9px; border: 1px solid #343a34; color: #edf1e6; background: #191d1b; font-family: inherit; cursor: pointer; min-width: 0; }
+.chord-string-button span { font-size: 9px; color: #919e8b; }
+.chord-string-button strong { font-size: 16px; font-weight: 650; }
+.chord-string-button small { font-size: 9px; color: #889281; }
+.chord-string-button:hover:enabled { background: #2a3525; border-color: #799168; }
+.chord-string-button:disabled { opacity: .46; cursor: default; }
+.chord-grip-practice { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 15px 0 0; margin-top: 15px; border-top: 1px solid #30372f; }
+.chord-grip-practice > div { display: grid; gap: 4px; }
+.chord-grip-practice strong { color: #d7e1cf; font-size: 11px; font-weight: 600; }
+.chord-grip-practice span { font-size: 10px; color: #8f998b; line-height: 1.8; }
+.chord-grip-practice .btn { flex-shrink: 0; }
+.chord-status { color: #a9b99e; font-size: 11px; line-height: 1.8; margin: 12px 0 0; min-height: 20px; }
+.chord-progression-heading { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
+.chord-progression-heading h3 { font-size: 22px; margin: 5px 0 8px; letter-spacing: -.3px; }
+.chord-progression-heading p { margin: 0; font-size: 12px; line-height: 1.9; }
+.chord-presets { display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.chord-presets .btn { white-space: nowrap; }
+.chord-sequence { display: flex; flex-wrap: wrap; gap: 10px; margin: 24px 0; }
+.chord-sequence-item { position: relative; display: flex; align-items: center; min-width: 145px; flex: 1; max-width: 240px; min-height: 96px; padding: 11px 28px 11px 13px; background: #171b18; border: 1px solid #353e31; border-radius: 11px; transition: background .18s, border-color .18s; }
+.chord-sequence-item.is-playing { background: #2a3824; border-color: #b5d4a0; box-shadow: 0 0 0 1px #b5d4a025; }
+.chord-sequence-index { align-self: flex-start; font-size: 10px; color: #76856d; padding-top: 3px; }
+.chord-sequence-chord { display: grid; gap: 7px; min-width: 0; width: 100%; padding: 6px 8px; background: transparent; border: 0; text-align: left; font-family: inherit; color: #f4f3e9; cursor: pointer; }
+.chord-sequence-chord strong { font-size: 28px; font-weight: 650; line-height: 1; }
+.chord-sequence-chord span { color: #8d9d83; font-size: 10px; white-space: nowrap; }
+.chord-remove { position: absolute; top: 8px; right: 8px; width: 24px; height: 24px; color: #899480; border: 0; border-radius: 50%; background: transparent; font-size: 19px; line-height: 1; cursor: pointer; }
+.chord-remove:hover { background: #3c3c30; color: #f4f3e9; }
+.chord-sequence-empty { padding: 22px; border: 1px dashed #46533d; border-radius: 10px; color: #9eac95; font-size: 12px; width: 100%; }
+.chord-progression-controls { display: flex; align-items: center; gap: 25px; flex-wrap: wrap; border-top: 1px solid #30372f; padding-top: 20px; }
+.chord-tempo { display: grid; gap: 7px; font-size: 11px; color: #a4aaa3; min-width: 145px; max-width: 230px; flex: 1; }
+.chord-tempo strong { color: #d1e2c5; margin: 0 3px; }
+.chord-tempo input { width: 100%; accent-color: #b5d4a0; margin: 0; cursor: pointer; }
+.chord-loop { display: flex; align-items: center; gap: 7px; font-size: 11px; color: #a4aaa3; white-space: nowrap; cursor: pointer; }
+.chord-loop input { accent-color: #b5d4a0; width: 15px; height: 15px; }
+.chord-beats { display: flex; gap: 6px; margin-left: auto; }
+.chord-beats span { display: flex; align-items: center; justify-content: center; width: 27px; height: 27px; border: 1px solid #3c4834; border-radius: 50%; background: #222a1e; color: #7f9272; font-size: 10px; transition: background .12s; }
+.chord-beats span.is-active { background: #b5d4a0; color: #1a2516; border-color: #b5d4a0; box-shadow: 0 0 0 4px #b5d4a010; }
+.chord-tip { display: flex; gap: 15px; padding: 19px 24px; border: 1px solid #35402f; border-radius: 14px; background: #20271d; }
+.chord-tip-icon { color: #b5d4a0; font-size: 21px; }
+.chord-tip strong { color: #c6d9b9; font-size: 12px; font-weight: 600; }
+.chord-tip p { color: #9fac95; line-height: 1.9; font-size: 11px; margin: 5px 0 0; max-width: 900px; }
+.chord-page button:focus-visible, .chord-page input:focus-visible, .chord-page select:focus-visible { outline: 2px solid #d0e5bf; outline-offset: 3px; }
+@media (max-width: 1150px) {
+  .chord-workspace { grid-template-columns: minmax(250px, .75fr) minmax(0, 1.25fr); gap: 16px; }
+  .chord-catalog, .chord-detail, .chord-progression { padding: 20px; }
+  .chord-detail-body { gap: 7px; grid-template-columns: minmax(150px, .9fr) minmax(160px, 1fr); }
+  .chord-results { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chord-grip-practice { align-items: flex-start; flex-direction: column; }
+  .chord-progression-heading { align-items: flex-start; }
+}
+@media (max-width: 850px) {
+  .chord-intro { align-items: flex-start; }
+  .chord-count-tag { font-size: 10px; padding: 8px 11px; margin-top: 6px; }
+  .chord-workspace { grid-template-columns: 1fr; }
+  .chord-catalog { padding-bottom: 17px; }
+  .chord-filters { grid-template-columns: repeat(3, 1fr); }
+  .chord-position-filter { grid-column: auto; }
+  .chord-results { grid-template-columns: repeat(6, minmax(0, 1fr)); max-height: 178px; min-height: 70px; }
+  .chord-detail-body { grid-template-columns: minmax(200px, .85fr) minmax(200px, 1fr); gap: 25px; }
+  .chord-diagram { max-height: 290px; }
+  .chord-grip-practice { align-items: center; flex-direction: row; }
+  .chord-progression-heading { flex-direction: column; gap: 15px; }
+  .chord-presets { justify-content: flex-start; }
+}
+@media (max-width: 580px) {
+  .chord-page { gap: 18px; }
+  .chord-intro { flex-direction: column; gap: 12px; }
+  .chord-intro h1 { font-size: 25px; }
+  .chord-intro p { font-size: 12px; }
+  .chord-count-tag { margin: 0; }
+  .chord-catalog, .chord-detail, .chord-progression { padding: 18px; border-radius: 14px; }
+  .chord-filters { gap: 8px; }
+  .chord-filters .select { padding: 9px 6px; font-size: 10px; }
+  .chord-results { grid-template-columns: repeat(4, minmax(0, 1fr)); max-height: 162px; }
+  .chord-result { padding: 10px 8px; min-height: 65px; }
+  .chord-result strong { font-size: 17px; }
+  .chord-result span { font-size: 8px; }
+  .chord-detail-heading h3 { font-size: 40px; }
+  .chord-detail-body { grid-template-columns: 1fr; gap: 0; }
+  .chord-diagram { max-height: 270px; width: 260px; max-width: 100%; }
+  .chord-voicing-info { padding: 10px 0 16px; }
+  .chord-shape-description { font-size: 12px; }
+  .chord-diagram-key { font-size: 10px; }
+  .chord-voicing-info .chord-sound-actions .btn { flex: 1; font-size: 11px; }
+  .chord-string-samples { gap: 4px; }
+  .chord-string-button { padding: 9px 1px; }
+  .chord-string-button strong { font-size: 14px; }
+  .chord-string-button small, .chord-string-button span { font-size: 8px; }
+  .chord-grip-practice { align-items: flex-start; flex-direction: column; }
+  .chord-grip-practice span { font-size: 11px; }
+  .chord-sequence { gap: 8px; margin: 18px 0; }
+  .chord-sequence-item { min-width: calc(50% - 4px); flex-basis: calc(50% - 4px); box-sizing: border-box; max-width: none; min-height: 92px; }
+  .chord-sequence-chord span { font-size: 9px; }
+  .chord-progression-controls { gap: 18px 15px; }
+  .chord-progression-controls > .btn { width: 100%; }
+  .chord-tempo { min-width: 135px; }
+  .chord-beats { margin-left: 0; }
+  .chord-beats span { width: 24px; height: 24px; }
+  .chord-tip { padding: 16px; gap: 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chord-page * { transition: none !important; }
+}

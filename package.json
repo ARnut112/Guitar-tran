@@ -1,0 +1,1 @@
+{"name":"fret-and-flow","version":"2.0.0","private":true,"type":"module","description":"A local-first Thai fingerstyle guitar practice studio","scripts":{"start":"node server.mjs","test":"node --test tests/*.test.mjs"},"engines":{"node":">=18"}}
